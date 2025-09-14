@@ -40,9 +40,13 @@ jobs:
         uses: prefix-dev/setup-pixi@v0.9.0
         with:
           # Version of pixi to install
-          pixi-version: 0.49.0 # optional
+          pixi-version: v0.49.0 # optional
+          cache: true
+          auth-host: prefix.dev
+          auth-token: ${{ secrets.PREFIX_DEV_TOKEN }}
           
           # Path to the pixi binary to use. Defaults to `~/.pixi/bin/pixi`.
+      - run: source /home/runner/.bashrc
           
 
       - name: Setup environment
