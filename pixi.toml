@@ -1,0 +1,20 @@
+[workspace]
+authors = ["Nilesh <4813079+nilesh-patil@users.noreply.github.com>"]
+channels = ["conda-forge"]
+name = "scaling-book"
+platforms = ["osx-arm64"]
+version = "0.1.0"
+
+[tasks]
+setup_env = "pixi run sh ./setup_env.sh"
+build = "bundle exec jekyll serve"
+
+[dependencies]
+imagemagick = ">=7.1.2_3,<8"
+python = "3.12.*"
+jupyter = ">=1.1.1,<2"
+ruby = "==3.4.5"
+c-compiler = ">=1.11.0,<2"
+cxx-compiler = ">=1.11.0,<2"
+make = ">=4.4.1,<5"
+pkg-config = ">=0.29.2,<0.30"
