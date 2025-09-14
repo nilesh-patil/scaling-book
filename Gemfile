@@ -1,6 +1,10 @@
 source 'https://rubygems.org'
 
 gem 'jekyll'
+gem 'csv'
+gem 'base64'
+gem 'bigdecimal'
+gem 'mutex_m'
 
 # Core plugins that directly affect site building
 group :jekyll_plugins do
