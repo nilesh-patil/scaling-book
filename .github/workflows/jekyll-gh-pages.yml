@@ -1,0 +1,108 @@
+# Sample workflow for building and deploying a Jekyll site to GitHub Pages
+name: Deploy Jekyll with GitHub Pages dependencies preinstalled
+
+on:
+  # Runs on pushes targeting the default branch
+  push:
+    branches: ["main"]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  # Build job
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: setup-pixi
+        # You may pin to the exact commit or the version.
+        # uses: prefix-dev/setup-pixi@d72307a91ccc8a856376cdb9ff5b074a04422409
+        uses: prefix-dev/setup-pixi@v0.7.0
+        with:
+          # Version of pixi to install
+          pixi-version: # optional
+          # URL of pixi to install
+          pixi-url: # optional
+          # Log level for the pixi CLI.
+          # One of `q`, `default`, `v`, `vv`, or `vvv`.
+      
+          log-level: # optional
+          # Path to the manifest file (i.e., `pixi.toml`) to use for the pixi CLI. Defaults to `pixi.toml`.
+          manifest-path: # optional
+          # Whether to run `pixi install` after setting up the environment. Defaults to `true`.
+          run-install: # optional
+          # A space-separated list of environments to install. If not specified, only the default environment is installed.
+      
+          environments: # optional
+          # If the installed environment should be "activated" for the current job, modifying `$GITHUB_ENV` and
+          # `$GITHUB_PATH`. If more than one environment is specified in `environments`, this must be the name of the
+          # environment. Defaults to `false`. Requires at least pixi v0.21.0.
+      
+          activate-environment: # optional
+          # Whether to use `pixi install --locked`. Defaults to `true` when the lockfile is present, otherwise `false`.
+          locked: # optional
+          # Whether to use `pixi install --frozen`. Defaults to `false`.
+          frozen: # optional
+          # Whether to cache the pixi environment. Defaults to `true`. Only works if `pixi.lock` is present.
+          cache: # optional
+          # Cache key prefix to use for caching the pixi environment.
+          # Defaults to `pixi-`. The full cache key is `<cache-key><conda-arch>-<sha-256-of-pixi-lock>`.
+      
+          cache-key: # optional
+          # Whether to write to the cache or only read from it. Defaults to `true`.
+      
+          cache-write: # optional
+          # Path to the pixi binary to use. Defaults to `~/.pixi/bin/pixi`.
+      
+          pixi-bin-path: # optional
+          # Host to use for authentication. If not set, pixi is not authenticating.
+          # Requires `auth-token` or `auth-conda-token` or `auth-username` and `auth-password` to be set.
+          # See https://prefix.dev/docs/pixi/authentication
+      
+          auth-host: # optional
+          # Token to use for authentication.
+          auth-token: # optional
+          # Username to use for authentication.
+          auth-username: # optional
+          # Password to use for authentication.
+          auth-password: # optional
+          # Conda token to use for authentication.
+          auth-conda-token: # optional
+          # If the action should clean up after itself. Defaults to `true`.
+          # If `true`, the pixi environment, the pixi binary and the rattler files in ~/.rattler and ~/.cache/rattler are removed.
+      
+          post-cleanup: # optional
+          
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Build with Jekyll
+        run: |
+          pixi run setup_env
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+
+  # Deployment job
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
