@@ -1,8 +1,8 @@
 [workspace]
 authors = ["Nilesh <4813079+nilesh-patil@users.noreply.github.com>"]
-channels = ["conda-forge"]
+channels = ["conda-forge","defaults"]
 name = "scaling-book"
-platforms = ["osx-arm64"]
+platforms = ["osx-arm64","linux-64"]
 version = "0.1.0"
 
 [tasks]
