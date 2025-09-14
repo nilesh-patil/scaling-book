@@ -40,7 +40,8 @@ jobs:
 
       - name: Setup environment
         run: |
-          /home/runner/.pixi/bin run setup_env
+          source /home/runner/.bashrc
+          pixi run setup_env
           
       - name: Setup Pages
         id: pages
