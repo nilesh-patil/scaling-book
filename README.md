@@ -10,6 +10,24 @@ The website uses a Distill-style Jekyll theme created by https://github.com/alsh
 
 ### Running Locally
 
+#### Using Pixi :
+
+Install Pixi using the instructions from Pixi's [documentation](https://pixi.sh/latest/installation).
+
+```
+curl -fsSL https://pixi.sh/install.sh | sh
+```
+
+Then, run the following command to build and serve the book locally:
+
+```
+pixi run sh ./setup_env.sh
+```
+
+Visit [http://127.0.0.1:4000/scaling-book/](http://127.0.0.1:4000/scaling-book/) to see the book.
+
+#### Without Pixi :
+
 To build this repo locally, you will need Ruby, ImageMagick, and Jupyter installed, which for MacOS can be installed with Homebrew using
 
 ```
