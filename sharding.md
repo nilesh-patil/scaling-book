@@ -470,13 +470,13 @@ AllToAlls are typically required to rearrange sharded layouts between different 
 
 {% include figure.liquid path="assets/img/all-to-all.gif" class="img-fluid" %}
 
-If we generalize to an ND AllToAll, the overall cost for an array of $V$ bytes on an AxBxC mesh is
+If we generalize to an ND AllToAll, the overall cost for an array of $V$ total bytes (summed across all devices) on an AxBxC mesh is
 
 $$T_\text{comms per AllToAll} = \frac{V \cdot \max(A, B, C, ...)}{4 \cdot N \cdot W_\text{ici}}$$
 
-where as usual $W_\text{ici}$ is the bidirectional ICI bandwidth. For a 1D mesh, this reduces to $V / (4 \cdot W_\text{ici})$, which is 1 / 4 the cost of an AllGather. In 2D, the cost actually scales down with the size of the smallest axis.
+where as usual $W_\text{ici}$ is the bidirectional ICI bandwidth and $N = A \cdot B \cdot C \cdot \ldots$ is the total number of devices. Equivalently, in terms of the per-device bytes $V / N$, the cost is $(V / N) \cdot \max(A, B, C, ...) / (4 \cdot W_\text{ici})$. For a 1D mesh, this reduces to $V / (4 \cdot W_\text{ici})$, which is 1 / 4 the cost of an AllGather. In 2D, the cost actually scales down with the size of the smallest axis.
 
-*Aside: If you want a hand-wavy derivation of this fact, start with a 1D torus $\mathbb{Z} / N\mathbb{Z}$. If we pick a source and target node at random, they are on average N / 4 hops from each other, giving us a cost of $(V \cdot N) / (4 * N)$. Now if we consider an ND torus, each axis is basically independent. Each node has $1 / N$ bytes and on average has to hop its data $\max(A, B, C, …) / 4$ hops.*
+*Aside: If you want a hand-wavy derivation of this fact, start with a 1D torus $\mathbb{Z} / N\mathbb{Z}$. If we pick a source and target node at random, they are on average N / 4 hops from each other, giving us a cost of $(V \cdot N) / (4 * N)$. Now if we consider an ND torus, each axis is basically independent. Each node has $1 / N$ bytes and on average has to hop its data $\max(A, B, C, …) / 4$ hops. You can also derive this from bisection bandwidth: in an AllToAll, each half of the mesh sends half its data ($V / 4$ bytes) to the other half. The narrowest bisection cuts perpendicular to the longest axis, crossing $2 \cdot N / \max(A, B, …)$ links (two cut planes, counting wraparound), for a one-directional bandwidth of $N \cdot W_\text{ici} / \max(A, B, …)$. Dividing gives the formula above.*
 
 ### More about the ReduceScatter
 
