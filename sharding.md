@@ -301,7 +301,7 @@ This way the actual multiplication can be done fully on each device.
 
 <p markdown=1 class="takeaway">**Takeaway:** When multiplying matrices where one of the matrices is sharded along the contracting dimension, we generally AllGather it first so the contraction is no longer sharded, then do a local matmul.</p>
 
-Note that when **B** is not also sharded along X, we could also do the local partial matmul and then sum (or *AllReduce*) the sharded partial sums, which can be faster in some cases. See Question 4 [below](#some-problems-to-work).
+Note that when **B** is not also sharded along X, we could also do the local partial matmul and then sum (or *AllReduce*) the sharded partial sums, which lets us shard the compute but usually has a higher communication cost. This can be faster in some cases, although it's usually true in practice that **B** will be sharded. Question 4 [below](#some-problems-to-work) works through when this is better.
 
 **What is an AllGather?** An AllGather is the first core [MPI](https://en.wikipedia.org/wiki/Message_Passing_Interface) communication primitive we will discuss. An AllGather *removes the sharding* along an axis and reassembles the shards spread across devices onto *each* device along that axis. Using the notation above, an AllGather removes a subscript from a set of axes, e.g.
 
